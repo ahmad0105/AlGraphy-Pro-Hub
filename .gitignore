@@ -1,0 +1,11 @@
+/vendor/
+/public/uploads/avatars/*
+!/public/uploads/avatars/.gitkeep
+/public/uploads/backgrounds/*
+!/public/uploads/backgrounds/.gitkeep
+/public/uploads/links/*
+!/public/uploads/links/.gitkeep
+/brain/
+.DS_Store
+.env
+*.log

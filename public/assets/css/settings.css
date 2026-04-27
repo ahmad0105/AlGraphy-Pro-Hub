@@ -1,0 +1,390 @@
+/* ══════════════════════════════════════════
+   Settings Page — Premium Redesign
+   ══════════════════════════════════════════ */
+
+/* ── Settings Tabs Navigation ── */
+.settings-tabs {
+    display: flex;
+    gap: 5px;
+    background: var(--card-bg);
+    padding: 6px;
+    border-radius: 14px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    overflow-x: auto;
+}
+
+.settings-tab {
+    flex: 1;
+    padding: 12px 20px;
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.settings-tab:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.settings-tab.active {
+    background: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(220, 39, 38, 0.3);
+}
+
+.settings-tab i {
+    font-size: 1rem;
+}
+
+/* ── Settings Panel ── */
+.settings-panel {
+    display: none;
+    animation: settingsFadeIn 0.4s ease;
+}
+
+.settings-panel.active {
+    display: block;
+}
+
+@keyframes settingsFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Settings Card ── */
+.settings-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: border-color 0.3s ease;
+}
+
+.settings-card:hover {
+    border-color: rgba(220, 39, 38, 0.15);
+}
+
+.settings-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 25px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.settings-card-icon {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, var(--primary-color), rgba(220, 39, 38, 0.6));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.settings-card-header h3 {
+    font-size: 1.15rem;
+    color: #fff;
+    margin: 0;
+    font-weight: 600;
+}
+
+.settings-card-header p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 4px 0 0 0;
+}
+
+/* ── Avatar Section ── */
+.avatar-settings-row {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.avatar-circle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    overflow: hidden;
+    border: 3px solid var(--primary-color);
+    box-shadow: 0 0 20px rgba(220, 39, 38, 0.2);
+    flex-shrink: 0;
+}
+
+.avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.avatar-info h4 {
+    color: #fff;
+    font-size: 1rem;
+    margin: 0 0 4px 0;
+}
+
+.avatar-info p {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    margin: 0;
+}
+
+.avatar-info .btn {
+    margin-top: 10px;
+    align-self: flex-end;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+}
+
+/* ── Form Rows ── */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+
+@media (min-width: 640px) {
+    .form-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(220, 39, 38, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* ── Color Pickers ── */
+.color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 15px;
+}
+
+.color-picker-item {
+    text-align: center;
+}
+
+.color-picker-item label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.color-picker-item input[type="color"] {
+    width: 100%;
+    height: 42px;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    cursor: pointer;
+    background: transparent;
+    padding: 2px;
+    transition: border-color 0.3s ease;
+}
+
+.color-picker-item input[type="color"]:hover {
+    border-color: var(--primary-color);
+}
+
+/* ── Select Styling ── */
+.styled-select {
+    width: 100%;
+    padding: 12px 15px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+}
+
+.styled-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(220, 39, 38, 0.1);
+    outline: none;
+}
+
+/* ── File Upload ── */
+.file-upload-zone {
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.file-upload-zone:hover {
+    border-color: var(--primary-color);
+    background: rgba(220, 39, 38, 0.05);
+}
+
+.file-upload-zone i {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.file-upload-zone p {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.file-upload-zone .current-file {
+    color: var(--primary-color);
+    font-size: 0.78rem;
+    margin-top: 8px;
+}
+
+/* ── Save Button ── */
+.save-section {
+    position: sticky;
+    bottom: 20px;
+    z-index: 10;
+    margin-top: 20px;
+}
+
+.save-btn-full {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary-color), #b91c1c);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 8px 30px rgba(220, 39, 38, 0.3);
+}
+
+.save-btn-full:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(220, 39, 38, 0.4);
+}
+
+.save-btn-full:active {
+    transform: translateY(0);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+    .settings-tabs {
+        padding: 4px;
+        gap: 3px;
+    }
+
+    .settings-tab {
+        padding: 10px 12px;
+        font-size: 0.75rem;
+    }
+
+    .settings-tab span {
+        display: none;
+    }
+
+    .settings-card {
+        padding: 20px;
+    }
+
+    .avatar-settings-row {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .color-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
