@@ -12,10 +12,10 @@ class Database {
 
     public static function connect(): PDO {
         if (self::$connection === null) {
-            $host = "localhost";
-            $db_name = "algraphy_pro_hub";
-            $username = "root";
-            $password = "";
+            $host = $_ENV['DB_HOST'] ?? "localhost";
+            $db_name = $_ENV['DB_NAME'] ?? "algraphy_pro_hub";
+            $username = $_ENV['DB_USER'] ?? "root";
+            $password = $_ENV['DB_PASS'] ?? "";
 
             try {
                 self::$connection = new PDO(

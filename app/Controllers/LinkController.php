@@ -41,20 +41,17 @@ class LinkController extends Controller {
                 }
 
                 // Validate URL protocol to prevent javascript: XSS
-                if (!preg_match('/^(https?:\/\/|mailto:)/i', $url)) {
-                    throw new Exception("URL must start with http:// or https://");
+                // Allow http, https, mailto, tel, starting with +/numbers (phone), or email format
+                if (!preg_match('/^(https?:\/\/|mailto:|tel:|\+?[0-9]|[^\s@]+@[^\s@]+\.[^\s@]+)/i', $url)) {
+                    throw new Exception("Please enter a valid URL, phone number, or email.");
                 }
 
                 // Use manual icon from picker, or fallback to smart detection
                 $icon = $this->sanitize($_POST['icon'] ?? $this->getPlatformIcon($url));
 
-                // Handle Thumbnail Upload
-                $thumbnail = null;
-                if (!empty($_FILES['thumbnail']['name'])) {
-                    $thumbnail = $this->handleThumbnailUpload((int)$_SESSION['user_id']);
-                }
 
-                if ($this->linkModel->addLink((int)$_SESSION['user_id'], $title, $url, $icon, $subtitle, $thumbnail)) {
+
+                if ($this->linkModel->addLink((int)$_SESSION['user_id'], $title, $url, $icon, $subtitle)) {
                     $this->setFlash('success', "Link added successfully!");
                 } else {
                     throw new Exception("Failed to add link.");
@@ -78,24 +75,20 @@ class LinkController extends Controller {
                 $url = filter_var(trim($_POST['url'] ?? ''), FILTER_SANITIZE_URL);
 
                 if (!$id || !$title || !$url) {
-                    throw new Exception("Missing required fields.");
+                    throw new Exception("Please provide all required fields.");
                 }
 
-                // Validate URL protocol to prevent javascript: XSS
-                if (!preg_match('/^(https?:\/\/|mailto:)/i', $url)) {
-                    throw new Exception("URL must start with http:// or https://");
+                // Validate URL protocol
+                if (!preg_match('/^(https?:\/\/|mailto:|tel:|\+?[0-9]|[^\s@]+@[^\s@]+\.[^\s@]+)/i', $url)) {
+                    throw new Exception("Please enter a valid URL, phone number, or email.");
                 }
 
                 // Use manual icon from picker, or fallback to smart detection
                 $icon = $this->sanitize($_POST['icon'] ?? $this->getPlatformIcon($url));
 
-                // Handle Thumbnail Upload
-                $thumbnail = $_POST['current_thumbnail'] ?? null;
-                if (!empty($_FILES['thumbnail']['name'])) {
-                    $thumbnail = $this->handleThumbnailUpload((int)$_SESSION['user_id']);
-                }
 
-                if ($this->linkModel->updateLink($id, (int)$_SESSION['user_id'], $title, $url, $icon, $subtitle, $thumbnail)) {
+
+                if ($this->linkModel->updateLink($id, (int)$_SESSION['user_id'], $title, $url, $icon, $subtitle)) {
                     $this->setFlash('success', "Link updated successfully!");
                 } else {
                     throw new Exception("Failed to update link.");
@@ -164,35 +157,4 @@ class LinkController extends Controller {
         }
     }
 
-    /**
-     * Handle link thumbnail upload
-     */
-    private function handleThumbnailUpload(int $userId): string {
-        $file = $_FILES['thumbnail'];
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-        $maxSize = 2 * 1024 * 1024; // 2MB
-
-        if (!in_array($file['type'], $allowedTypes)) {
-            throw new Exception("Thumbnail must be a JPG, PNG or WebP image.");
-        }
-
-        if ($file['size'] > $maxSize) {
-            throw new Exception("Thumbnail is too large. Max 2MB.");
-        }
-
-        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $fileName = 'thumb_' . $userId . '_' . time() . '_' . rand(100, 999) . '.' . $extension;
-        $uploadPath = __DIR__ . '/../../public/uploads/links/' . $fileName;
-
-        // Ensure directory exists
-        if (!is_dir(dirname($uploadPath))) {
-            mkdir(dirname($uploadPath), 0777, true);
-        }
-
-        if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
-            return $fileName;
-        } else {
-            throw new Exception("Failed to save thumbnail.");
-        }
-    }
 }

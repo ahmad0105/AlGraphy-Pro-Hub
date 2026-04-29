@@ -9,11 +9,18 @@
     $seoTitle = !empty($user['seo_title']) ? $user['seo_title'] : ($user['display_name'] ?: $user['username']) . ' | AlGraphy Pro Hub';
     $seoDesc = !empty($user['seo_description']) ? $user['seo_description'] : (!empty($user['bio']) ? $user['bio'] : 'Check out my professional AlGraphy Pro Hub profile.');
     $profileUrl = "https://" . $_SERVER['HTTP_HOST'] . "/" . $user['username'];
-    $avatarUrl = !empty($user['avatar']) ? \App\Core\Config::url('public/uploads/avatars/' . $user['avatar']) : \App\Core\Config::asset('img/default-avatar.png');
+    $avatarUrl = !empty($user['avatar']) ? \App\Core\Config::upload('avatars/' . $user['avatar']) : \App\Core\Config::asset('img/default-avatar.png');
     ?>
 
     <!-- Performance: Preload Avatar -->
     <link rel="preload" as="image" href="<?php echo $avatarUrl; ?>">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="<?php echo \App\Core\Config::asset('logo/favicon-96x96.png'); ?>" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="<?php echo \App\Core\Config::asset('logo/favicon.svg'); ?>" />
+    <link rel="shortcut icon" href="<?php echo \App\Core\Config::asset('logo/favicon.svg'); ?>" />
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo \App\Core\Config::asset('logo/apple-touch-icon.png'); ?>" />
+    <link rel="manifest" href="<?php echo \App\Core\Config::asset('logo/site.webmanifest'); ?>" crossorigin="use-credentials" />
 
     <!-- Standard Meta Tags -->
     <title><?php echo htmlspecialchars($seoTitle); ?></title>
@@ -84,7 +91,7 @@
     $fontFamily = in_array($user['font_family'] ?? '', $allowedFonts) ? $user['font_family'] : "'Nunito', sans-serif";
     
     $bgType = in_array($user['bg_type'] ?? 'color', ['color', 'image', 'video']) ? ($user['bg_type'] ?? 'color') : 'color';
-    $bgMedia = !empty($user['bg_media']) ? \App\Core\Config::url('public/uploads/backgrounds/' . $user['bg_media']) : null;
+    $bgMedia = $user['bg_media'] ?? null;
 
     // Fallback: If user selects image/video but forgot to upload a file, default back to color/matrix
     if (($bgType === 'image' || $bgType === 'video') && !$bgMedia) {
@@ -131,7 +138,7 @@
         body {
             background-color: var(--bg-color) !important;
             <?php if ($bgType === 'image' && $bgMedia): ?>
-            background-image: url('<?php echo $bgMedia; ?>') !important;
+            background-image: url('<?php echo \App\Core\Config::upload('backgrounds/' . $bgMedia); ?>') !important;
             background-size: cover !important;
             background-position: center !important;
             background-attachment: fixed !important;
@@ -140,87 +147,21 @@
             font-family: var(--font-main) !important;
         }
 
-        .link {
-            border-radius: var(--btn-radius) !important;
-            color: var(--btn-text) !important;
-            border: 1px solid var(--primary-color) !important;
-        }
-
-        .username, .display-name, .bio-text {
-            color: var(--font-color) !important;
-        }
-
-        .social-media-container {
-            background: rgba(255, 255, 255, 0.05) !important;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--primary-color) !important;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .social-media-container a {
-            background: transparent !important;
-            color: var(--primary-color) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .social-media-container a:hover {
-            background: var(--primary-color) !important;
-            color: var(--btn-text) !important;
-            border-color: var(--primary-color) !important;
-            box-shadow: 0 0 15px var(--primary-color);
-        }
         #matrix-canvas {
             display: <?php echo (($theme === 'dark' || $theme === 'custom') && $bgType === 'color') ? 'block' : 'none'; ?>;
         }
 
-        .link-icon {
-            font-size: 1.4rem;
-            position: absolute;
-            left: 20px;
-        }
-
-        .link-thumb {
-            width: 35px;
-            height: 35px;
-            border-radius: 8px;
-            object-fit: cover;
-            position: absolute;
-            left: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .link-content {
-            padding-left: 50px;
-        }
-
-        .video-bg {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            z-index: -2;
-            transform: translateX(-50%) translateY(-50%);
-            object-fit: cover;
-        }
-
         .bg-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6); /* Dark overlay to make text readable */
-            z-index: -1;
             display: <?php echo ($bgType === 'video' || $bgType === 'image') ? 'block' : 'none'; ?>;
         }
     </style>
 </head>
-<body>
+<body class="theme-<?php echo $theme; ?>">
     <canvas id="matrix-canvas"></canvas>
 
     <?php if ($bgType === 'video' && $bgMedia): ?>
         <video class="video-bg" autoplay loop muted playsinline>
-            <source src="<?php echo $bgMedia; ?>" type="video/mp4">
+            <source src="<?php echo \App\Core\Config::upload('backgrounds/' . $bgMedia); ?>" type="video/mp4">
         </video>
     <?php endif; ?>
     
@@ -229,7 +170,7 @@
     <div class="container">
         <div class="profile-avatar">
             <?php if (!empty($user['avatar'])): ?>
-                <img src="<?php echo \App\Core\Config::url('public/uploads/avatars/' . $user['avatar']); ?>" alt="Profile">
+                <img src="<?php echo \App\Core\Config::upload('avatars/' . $user['avatar']); ?>" alt="Profile">
             <?php else: ?>
                 <i class="fa-solid fa-circle-user"></i>
             <?php endif; ?>
@@ -279,11 +220,7 @@
             <div class="links-list">
                 <?php foreach ($links as $link): ?>
                     <a href="<?php echo \App\Core\Config::url('l?id=' . $link['id']); ?>" target="_blank" class="link">
-                        <?php if (!empty($link['thumbnail'])): ?>
-                            <img src="<?php echo \App\Core\Config::url('public/uploads/links/' . $link['thumbnail']); ?>" class="link-thumb">
-                        <?php else: ?>
-                            <i class="<?php echo htmlspecialchars($link['icon'] ?: 'fas fa-link'); ?> link-icon"></i>
-                        <?php endif; ?>
+                        <i class="<?php echo htmlspecialchars($link['icon'] ?: 'fas fa-link'); ?> link-icon"></i>
                         
                         <div class="link-content">
                             <span class="link-title"><?php echo htmlspecialchars($link['title']); ?></span>

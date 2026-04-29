@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify Email - AlGraphy Pro Hub</title>
     <link rel="stylesheet" href="<?php echo \App\Core\Config::asset('css/style.css'); ?>">
+    <link rel="stylesheet" href="<?php echo \App\Core\Config::asset('css/toast.css'); ?>">
 </head>
 <body>
     <div class="auth-container">
         <div class="logo">
-            <h1>AlGraphy <span>Pro Hub</span></h1>
+            <a href="<?php echo \App\Core\Config::url('dashboard'); ?>" class="navbar-logo-link">
+                <img src="<?php echo \App\Core\Config::asset('logo/Red_logo_algraphy.svg'); ?>" alt="AlGraphy" class="navbar-logo-img">
+                <h1 class="navbar-logo-text">Hub</h1>
+            </a>
         </div>
         <div class="card">
             <h2>Verify Your Email</h2>
@@ -17,14 +21,15 @@
                 We've sent a 6-digit code to your email. It will expire in 15 minutes.
             </p>
             
-            <!-- Display session errors if OTP is invalid or expired -->
-            <?php if (isset($_SESSION['error'])): ?>
-                <div class="alert alert-error"><?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?></div>
+            <!-- Show session messages as toasts -->
+            <?php if (isset($_SESSION['success'])): ?>
+                <script>window.addEventListener('DOMContentLoaded', () => showToast("<?php echo $_SESSION['success']; ?>", 'success'));</script>
+                <?php unset($_SESSION['success']); ?>
             <?php endif; ?>
 
-            <!-- Display session success messages (when a new code is resent) -->
-            <?php if (isset($_SESSION['success'])): ?>
-                <div class="alert alert-success"><?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?></div>
+            <?php if (isset($_SESSION['error'])): ?>
+                <script>window.addEventListener('DOMContentLoaded', () => showToast("<?php echo $_SESSION['error']; ?>", 'error'));</script>
+                <?php unset($_SESSION['error']); ?>
             <?php endif; ?>
 
             <!-- Verification form: user enters the 6-digit OTP code -->
@@ -44,6 +49,7 @@
             </div>
         </div>
     </div>
+    <script src="<?php echo \App\Core\Config::asset('js/toast.js'); ?>"></script>
     <script src="<?php echo \App\Core\Config::asset('js/main.js'); ?>"></script>
 </body>
 </html>

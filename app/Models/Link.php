@@ -48,15 +48,15 @@ class Link {
     /**
      * Add a new link
      */
-    public function addLink($userId, $title, $url, $icon = 'fas fa-link', $subtitle = null, $thumbnail = null) {
+    public function addLink($userId, $title, $url, $icon = 'fas fa-link', $subtitle = null) {
         // Get the current highest sort_order to put the new link at the end
         $stmt = $this->db->prepare("SELECT MAX(sort_order) as max_order FROM links WHERE user_id = ?");
         $stmt->execute([$userId]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $nextOrder = ($row['max_order'] ?? -1) + 1;
 
-        $stmt = $this->db->prepare("INSERT INTO links (user_id, title, subtitle, url, icon, thumbnail, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        return $stmt->execute([$userId, $title, $subtitle, $url, $icon, $thumbnail, $nextOrder]);
+        $stmt = $this->db->prepare("INSERT INTO links (user_id, title, subtitle, url, icon, sort_order) VALUES (?, ?, ?, ?, ?, ?)");
+        return $stmt->execute([$userId, $title, $subtitle, $url, $icon, $nextOrder]);
     }
 
     /**
@@ -70,9 +70,9 @@ class Link {
     /**
      * Update an existing link
      */
-    public function updateLink($linkId, $userId, $title, $url, $icon, $subtitle = null, $thumbnail = null) {
-        $stmt = $this->db->prepare("UPDATE links SET title = ?, subtitle = ?, url = ?, icon = ?, thumbnail = ? WHERE id = ? AND user_id = ?");
-        return $stmt->execute([$title, $subtitle, $url, $icon, $thumbnail, $linkId, $userId]);
+    public function updateLink($linkId, $userId, $title, $url, $icon, $subtitle = null) {
+        $stmt = $this->db->prepare("UPDATE links SET title = ?, subtitle = ?, url = ?, icon = ? WHERE id = ? AND user_id = ?");
+        return $stmt->execute([$title, $subtitle, $url, $icon, $linkId, $userId]);
     }
 
     /**

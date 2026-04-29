@@ -43,7 +43,7 @@ body {
 
 @media (max-width: 480px) {
     .container {
-        margin: 10px auto;
+        margin: 45px auto;
         padding: 10px;
     }
 
@@ -96,7 +96,7 @@ body {
 }
 
 .display-name {
-    font-size: 2.2rem;
+    font-size: 1.9rem;
     font-weight: 700;
     color: #fff;
     margin-bottom: 8px;
@@ -129,8 +129,8 @@ body {
 
 .social-media-container {
     display: flex;
-    gap: 15px;
-    padding: 10px 20px;
+    gap: 10px;
+    padding: 10px 15px;
     background: rgba(220, 39, 38, 0.15);
     backdrop-filter: blur(10px);
     border-radius: 50px;
@@ -199,6 +199,11 @@ body {
     color: var(--primary-color);
 }
 
+/* Special Case: Minimal Light Theme Hover Visibility */
+.theme-light .link:hover .link-title {
+    color: var(--btn-text) !important;
+}
+
 .link-icon {
     font-size: 1.4rem;
     margin-right: 15px;
@@ -238,4 +243,84 @@ body {
 .footer-logo span {
     color: var(--primary-color);
     font-weight: 800;
+}
+
+/* ══════════════════════════════════════════
+   Dynamic Theme Overrides & Extracted Static CSS
+   ══════════════════════════════════════════ */
+
+.link {
+    border-radius: var(--btn-radius) !important;
+    color: var(--btn-text) !important;
+    border: 1px solid var(--primary-color) !important;
+}
+
+.username,
+.display-name,
+.bio-text {
+    color: var(--font-color) !important;
+}
+
+.social-media-container {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--primary-color) !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.social-media-container a {
+    background: transparent !important;
+    color: var(--btn-text) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.social-media-container a:hover {
+    background: var(--primary-color) !important;
+    color: var(--btn-text) !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 15px var(--primary-color);
+}
+
+.link-icon {
+    font-size: 1.4rem;
+    position: absolute;
+    left: 20px;
+}
+
+.link-thumb {
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    object-fit: cover;
+    position: absolute;
+    left: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.link-content {
+    padding-left: 50px;
+}
+
+.video-bg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -2;
+    transform: translateX(-50%) translateY(-50%);
+    object-fit: cover;
+}
+
+.bg-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    /* Dark overlay to make text readable */
+    z-index: -1;
 }

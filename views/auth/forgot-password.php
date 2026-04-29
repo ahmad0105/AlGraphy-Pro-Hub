@@ -6,11 +6,21 @@
     <title>Forgot Password - AlGraphy Pro Hub</title>
     <!-- Link to the main CSS file using the Config helper -->
     <link rel="stylesheet" href="<?php echo \App\Core\Config::asset('css/style.css'); ?>">
+    <link rel="stylesheet" href="<?php echo \App\Core\Config::asset('css/toast.css'); ?>">
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="<?php echo \App\Core\Config::asset('logo/favicon-96x96.png'); ?>" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="<?php echo \App\Core\Config::asset('logo/favicon.svg'); ?>" />
+    <link rel="shortcut icon" href="<?php echo \App\Core\Config::asset('logo/favicon.svg'); ?>" />
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo \App\Core\Config::asset('logo/apple-touch-icon.png'); ?>" />
+    <link rel="manifest" href="<?php echo \App\Core\Config::asset('logo/site.webmanifest'); ?>" crossorigin="use-credentials" />
 </head>
 <body>
     <div class="auth-container">
         <div class="logo">
-            <h1>AlGraphy <span>Pro Hub</span></h1>
+            <a href="<?php echo \App\Core\Config::url('dashboard'); ?>" class="navbar-logo-link">
+                <img src="<?php echo \App\Core\Config::asset('logo/Red_logo_algraphy.svg'); ?>" alt="AlGraphy" class="navbar-logo-img">
+                <h1 class="navbar-logo-text">Hub</h1>
+            </a>
         </div>
         <div class="card">
             <h2>Reset Password</h2>
@@ -18,14 +28,15 @@
                 Enter your email and we'll send you a link to reset your password.
             </p>
             
-            <!-- Show success message if the reset link was sent successfully -->
+            <!-- Show session messages as toasts -->
             <?php if (isset($_SESSION['success'])): ?>
-                <div class="alert alert-success"><?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?></div>
+                <script>window.addEventListener('DOMContentLoaded', () => showToast("<?php echo $_SESSION['success']; ?>", 'success'));</script>
+                <?php unset($_SESSION['success']); ?>
             <?php endif; ?>
 
-            <!-- Show error message if the email was not found or something went wrong -->
             <?php if (isset($_SESSION['error'])): ?>
-                <div class="alert alert-error"><?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?></div>
+                <script>window.addEventListener('DOMContentLoaded', () => showToast("<?php echo $_SESSION['error']; ?>", 'error'));</script>
+                <?php unset($_SESSION['error']); ?>
             <?php endif; ?>
 
             <!-- Forgot Password Form: Submits the user's email to start the reset process -->
@@ -44,6 +55,7 @@
         </div>
     </div>
     <!-- Include the main JS file for alert animations and global logic -->
+    <script src="<?php echo \App\Core\Config::asset('js/toast.js'); ?>"></script>
     <script src="<?php echo \App\Core\Config::asset('js/main.js'); ?>"></script>
 </body>
 </html>

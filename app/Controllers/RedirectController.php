@@ -25,8 +25,24 @@ class RedirectController extends Controller {
         
         $this->analyticsModel->logClick((int)$linkId, $ip, $userAgent);
 
-        // 3. Redirect to the actual destination
-        header("Location: " . $link['url']);
+        // 3. Smart Redirect: Detect if it's a phone number or email
+        $url = trim($link['url']);
+        
+        // If it starts with + or is just numbers (phone detection)
+        if (preg_match('/^\+?[0-9\s\-]{7,20}$/', $url)) {
+            $cleanPhone = str_replace([' ', '-', '(', ')'], '', $url);
+            $url = 'tel:' . $cleanPhone;
+        } 
+        // If it's an email
+        elseif (filter_var($url, FILTER_VALIDATE_EMAIL)) {
+            $url = 'mailto:' . $url;
+        }
+        // Ensure standard URLs have protocol
+        elseif (!str_starts_with($url, 'http') && !str_starts_with($url, 'tel:') && !str_starts_with($url, 'mailto:')) {
+            $url = 'https://' . $url;
+        }
+
+        header("Location: " . $url);
         exit();
     }
 }

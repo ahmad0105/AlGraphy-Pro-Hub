@@ -45,14 +45,71 @@ body {
 .logo {
     text-align: center;
     margin-bottom: 30px;
+    display: contents;
 }
 
-.logo h1 {
-    font-size: 2.2rem;
+.navbar-logo-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    text-decoration: none;
+}
+
+.navbar-logo-img {
+    height: 75px;
+    width: auto;
+}
+
+/* Auth Page Logo Customization */
+.auth-container .logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.auth-container .navbar-logo-link {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* Text starts from left edge of logo */
+    gap: 2px;
+}
+
+.auth-container .navbar-logo-text {
+    font-size: 2rem;
+    margin-top: -5px;
+    margin-left: 0px;
+}
+
+.navbar-logo-text {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    color: #ffffff;
+}
+
+/* Specific logo text style for Dashboard and Settings */
+.dashboard-body .navbar-logo-text {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2rem;
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
+    align-self: center;
+    margin-top: auto;
 }
+
+
+.logo h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    align-self: center;
+}
+
 
 .logo span {
     color: var(--primary-color);
@@ -120,6 +177,11 @@ h2 {
     margin-top: 10px;
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+/* Adjust margin for QR Download button specifically */
+.dashboard-section .qr-download-btn {
+    margin-top: -5px;
 }
 
 .btn:hover {
@@ -204,19 +266,21 @@ h2 {
     flex-direction: column;
     width: 100%;
     min-height: 100vh;
-    padding: 40px;
-    align-items: flex-start;
+    padding: 20px 40px;
+    align-items: center;
+    /* Center the content */
     justify-content: flex-start;
 }
 
 .navbar {
     width: 100%;
+    max-width: 1400px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 15px 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--gray);
+    padding: 5px 0;
 }
 
 .user-welcome {
@@ -294,7 +358,7 @@ h2 {
         width: calc(50% - 10px);
         justify-content: center;
     }
-    
+
     .user-welcome {
         font-size: 0.85rem;
     }
@@ -303,7 +367,7 @@ h2 {
 .dashboard-card {
     width: 100%;
     max-width: 100%;
-    margin: 0 auto;
+    margin: -15px auto;
 
 }
 

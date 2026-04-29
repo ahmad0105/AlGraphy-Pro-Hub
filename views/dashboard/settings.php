@@ -8,40 +8,52 @@
     <link rel="stylesheet" href="<?php echo \App\Core\Config::asset('css/style.css'); ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Cropper.js for image cropping (Local) -->
-    <link rel="stylesheet" href="<?php echo \App\Core\Config::asset('css/cropper.min.css'); ?>">
-    <link rel="stylesheet" href="<?php echo \App\Core\Config::asset('css/modal.css'); ?>">
+    <link rel="stylesheet" href="<?php echo \App\Core\Config::asset('css/dashboard.css'); ?>">
     <link rel="stylesheet" href="<?php echo \App\Core\Config::asset('css/settings.css'); ?>">
+    <link rel="stylesheet" href="<?php echo \App\Core\Config::asset('css/modal.css'); ?>">
+    <link rel="stylesheet" href="<?php echo \App\Core\Config::asset('css/toast.css'); ?>">
+    <link rel="stylesheet" href="<?php echo \App\Core\Config::asset('css/cropper.min.css'); ?>">
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="<?php echo \App\Core\Config::asset('logo/favicon-96x96.png'); ?>" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="<?php echo \App\Core\Config::asset('logo/favicon.svg'); ?>" />
+    <link rel="shortcut icon" href="<?php echo \App\Core\Config::asset('logo/favicon.svg'); ?>" />
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo \App\Core\Config::asset('logo/apple-touch-icon.png'); ?>" />
+    <link rel="manifest" href="<?php echo \App\Core\Config::asset('logo/site.webmanifest'); ?>" crossorigin="use-credentials" />
 </head>
 
 <body class="dashboard-body">
     <div class="dashboard-layout">
         <nav class="navbar">
             <div class="logo">
-                <a href="<?php echo \App\Core\Config::url('dashboard'); ?>"
-                    style="text-decoration: none; color: inherit;">
-                    <h1>AlGraphy <span>Pro Hub</span></h1>
+                <a href="<?php echo \App\Core\Config::url('dashboard'); ?>" class="navbar-logo-link">
+                    <img src="<?php echo \App\Core\Config::asset('logo/Red_logo_algraphy.svg'); ?>" alt="AlGraphy"
+                        class="navbar-logo-img">
+                    <h1 class="navbar-logo-text">Hub</h1>
                 </a>
             </div>
             <div class="nav-links">
                 <span class="user-welcome">Hi,
-                    <strong><?php echo htmlspecialchars($user['display_name'] ?: $user['username']); ?></strong></span>
+                    <strong><?php echo htmlspecialchars($user['username']); ?></strong></span>
                 <a href="<?php echo \App\Core\Config::url('dashboard'); ?>"><i class="fas fa-home"></i> Dashboard</a>
                 <a href="<?php echo \App\Core\Config::url('logout'); ?>"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </nav>
 
         <div class="dashboard-card">
-            <div class="card" style="background: transparent; border: none; box-shadow: none;">
+            <div class="card card-transparent">
 
                 <?php if (isset($_SESSION['success'])): ?>
-                    <div class="alert alert-success"><?php echo htmlspecialchars($_SESSION['success']);
-                    unset($_SESSION['success']); ?></div>
+                    <script>window.addEventListener('DOMContentLoaded', () => showToast("<?php echo $_SESSION['success']; ?>", 'success'));</script>
+                    <?php unset($_SESSION['success']); ?>
                 <?php endif; ?>
 
                 <?php if (isset($_SESSION['error'])): ?>
-                    <div class="alert alert-error"><?php echo htmlspecialchars($_SESSION['error']);
-                    unset($_SESSION['error']); ?></div>
+                    <script>window.addEventListener('DOMContentLoaded', () => showToast("<?php echo $_SESSION['error']; ?>", 'error'));</script>
+                    <?php unset($_SESSION['error']); ?>
                 <?php endif; ?>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-content-main">
 
                 <!-- ═══ Tabs Navigation ═══ -->
                 <div class="settings-tabs">
@@ -79,7 +91,7 @@
                             <div class="avatar-settings-row">
                                 <div class="avatar-circle">
                                     <?php if ($user['avatar']): ?>
-                                        <img src="<?php echo \App\Core\Config::getBaseUrl(); ?>/public/uploads/avatars/<?php echo $user['avatar']; ?>"
+                                        <img src="<?php echo \App\Core\Config::upload('avatars/' . $user['avatar']); ?>"
                                             alt="Avatar">
                                     <?php else: ?>
                                         <i class="fas fa-user"></i>
@@ -88,10 +100,10 @@
                                 <div class="avatar-info">
                                     <h4><?php echo htmlspecialchars($user['display_name'] ?: $user['username']); ?></h4>
                                     <p>Max 2MB — JPG, PNG, WebP</p>
-                                    <label for="avatar" class="btn" style="cursor: pointer;">
+                                    <label for="avatar" class="btn cursor-pointer">
                                         <i class="fas fa-upload"></i> Change Photo
                                     </label>
-                                    <input type="file" id="avatar" name="avatar" style="display: none;" accept="image/*">
+                                    <input type="file" id="avatar" name="avatar" class="hidden-input" accept="image/*">
                                 </div>
                             </div>
                         </div>
@@ -124,7 +136,7 @@
                                     value="<?php echo htmlspecialchars($user['email']); ?>" required>
                             </div>
                             <div class="form-group">
-                                <label for="bio">Bio <span style="color: var(--text-muted); font-weight: 400;">(Max 80 characters)</span></label>
+                                <label for="bio">Bio <span class="text-muted-normal">(Max 80 characters)</span></label>
                                 <textarea id="bio" name="bio" rows="3" maxlength="80"
                                     placeholder="Tell people about yourself..."><?php echo htmlspecialchars($user['bio'] ?? ''); ?></textarea>
                             </div>
@@ -139,9 +151,9 @@
                                     <p>Update your password — leave blank to keep current</p>
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-bottom: 0;">
+                            <div class="form-group mb-0">
                                 <label for="password">New Password</label>
-                                <input type="password" id="password" name="password" placeholder="••••••••">
+                                <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password">
                             </div>
                         </div>
                     </div>
@@ -208,29 +220,39 @@
                                     <option value="media" <?php echo in_array($user['bg_type'] ?? '', ['image', 'video']) ? 'selected' : ''; ?>>Custom Media (Image/Video)</option>
                                 </select>
                             </div>
-                            <div id="bg_media_group" class="form-group" style="<?php echo in_array($user['bg_type'] ?? 'color', ['image', 'video']) ? 'display: block;' : 'display: none;'; ?>">
-                                <label>Upload Background <span style="color: var(--text-muted); font-weight: 400;">(Max 10MB)</span></label>
+                            <div id="bg_media_group" class="form-group"
+                                style="<?php echo in_array($user['bg_type'] ?? 'color', ['image', 'video']) ? 'display: block;' : 'display: none;'; ?>">
+                                <label>Upload Background <span class="text-muted-normal">(Max 10MB)</span></label>
                                 <label for="bg_media" class="file-upload-zone" style="display: block;">
                                     <i class="fas fa-cloud-upload-alt" style="display: block;"></i>
                                     <p>Click to select a file — JPG, PNG, WebP or MP4</p>
-                                    <div id="bg_preview_container" style="<?php echo !empty($user['bg_media']) ? 'display: block;' : 'display: none;'; ?> margin-top: 15px; border-radius: 8px; overflow: hidden; max-width: 200px; margin-left: auto; margin-right: auto; border: 1px solid rgba(255,255,255,0.1);">
+                                    <div id="bg_preview_container"
+                                        style="<?php echo !empty($user['bg_media']) ? 'display: block;' : 'display: none;'; ?> margin-top: 15px; border-radius: 8px; overflow: hidden; max-width: 200px; margin-left: auto; margin-right: auto; border: 1px solid rgba(255,255,255,0.1);">
                                         <?php if (!empty($user['bg_media'])): ?>
                                             <?php if (($user['bg_type'] ?? '') === 'video'): ?>
-                                                <video id="bg_preview_video" src="<?php echo \App\Core\Config::url('public/uploads/backgrounds/' . $user['bg_media']); ?>" muted loop autoplay style="width: 100%; display: block;"></video>
+                                                <video id="bg_preview_video"
+                                                    src="<?php echo \App\Core\Config::url('uploads/backgrounds/' . $user['bg_media']); ?>"
+                                                    muted loop autoplay style="width: 100%; display: block;"></video>
                                                 <img id="bg_preview_img" style="width: 100%; display: none;">
                                             <?php else: ?>
-                                                <img id="bg_preview_img" src="<?php echo \App\Core\Config::url('public/uploads/backgrounds/' . $user['bg_media']); ?>" style="width: 100%; display: block;">
-                                                <video id="bg_preview_video" muted loop autoplay style="width: 100%; display: none;"></video>
+                                                <img id="bg_preview_img"
+                                                    src="<?php echo \App\Core\Config::url('uploads/backgrounds/' . $user['bg_media']); ?>"
+                                                    style="width: 100%; display: block;">
+                                                <video id="bg_preview_video" muted loop autoplay
+                                                    style="width: 100%; display: none;"></video>
                                             <?php endif; ?>
-                                            <p id="bg_preview_filename" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px; padding: 5px;">Current: <?php echo htmlspecialchars($user['bg_media']); ?></p>
+                                                 <p id="bg_preview_filename" style="display: none;"></p>
                                         <?php else: ?>
                                             <img id="bg_preview_img" style="width: 100%; display: none;">
-                                            <video id="bg_preview_video" muted loop autoplay style="width: 100%; display: none;"></video>
-                                            <p id="bg_preview_filename" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px; padding: 5px;"></p>
+                                            <video id="bg_preview_video" muted loop autoplay
+                                                style="width: 100%; display: none;"></video>
+                                             <p id="bg_preview_filename" style="display: none;"></p>
                                         <?php endif; ?>
                                     </div>
                                 </label>
-                                <input type="file" id="bg_media" name="bg_media" accept="image/jpeg, image/png, image/webp, video/mp4" style="display: none;" onchange="handleBgPreview(this)">
+                                <input type="file" id="bg_media" name="bg_media" class="hidden-input"
+                                    accept="image/jpeg, image/png, image/webp, video/mp4"
+                                    onchange="handleBgPreview(this)">
                             </div>
                         </div>
 
@@ -244,21 +266,26 @@
                                 </div>
                             </div>
                             <div class="color-grid">
-                                <div class="color-picker-item" id="bg_color_group" style="<?php echo ($user['bg_type'] ?? 'color') !== 'color' ? 'display: none;' : ''; ?>">
+                                <div class="color-picker-item" id="bg_color_group"
+                                    style="<?php echo ($user['bg_type'] ?? 'color') !== 'color' ? 'display: none;' : ''; ?>">
                                     <label for="bg_color">Background</label>
-                                    <input type="color" id="bg_color" name="bg_color" value="<?php echo $user['bg_color'] ?? '#000000'; ?>">
+                                    <input type="color" id="bg_color" name="bg_color"
+                                        value="<?php echo $user['bg_color'] ?? '#000000'; ?>">
                                 </div>
                                 <div class="color-picker-item">
                                     <label for="button_bg_color">Button BG</label>
-                                    <input type="color" id="button_bg_color" name="button_bg_color" value="<?php echo $user['button_bg_color'] ?? '#dc2726'; ?>">
+                                    <input type="color" id="button_bg_color" name="button_bg_color"
+                                        value="<?php echo $user['button_bg_color'] ?? '#dc2726'; ?>">
                                 </div>
                                 <div class="color-picker-item">
                                     <label for="button_text_color">Button Text</label>
-                                    <input type="color" id="button_text_color" name="button_text_color" value="<?php echo $user['button_text_color'] ?? '#ffffff'; ?>">
+                                    <input type="color" id="button_text_color" name="button_text_color"
+                                        value="<?php echo $user['button_text_color'] ?? '#ffffff'; ?>">
                                 </div>
                                 <div class="color-picker-item">
                                     <label for="font_color">Font Color</label>
-                                    <input type="color" id="font_color" name="font_color" value="<?php echo $user['font_color'] ?? '#ffffff'; ?>">
+                                    <input type="color" id="font_color" name="font_color"
+                                        value="<?php echo $user['font_color'] ?? '#ffffff'; ?>">
                                 </div>
                             </div>
                         </div>
@@ -289,8 +316,10 @@
                             </div>
 
                             <!-- SEO Preview -->
-                            <div style="margin-top: 20px; padding: 18px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
-                                <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 10px;">
+                            <div
+                                style="margin-top: 20px; padding: 18px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                                <p
+                                    style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 10px;">
                                     <i class="fab fa-google" style="margin-right: 5px;"></i> Google Preview
                                 </p>
                                 <p style="color: #8ab4f8; font-size: 1rem; margin-bottom: 2px;" id="seoPreviewTitle">
@@ -310,9 +339,33 @@
                         </button>
                     </div>
 
-                </form>
-            </div>
-        </div>
+                        </form>
+                    </div> <!-- End dashboard-content-main -->
+
+                        <div class="dashboard-preview-sidebar">
+                            <div class="preview-sticky">
+                                <div class="phone-mockup">
+                                    <div class="phone-frame">
+                                        <div class="phone-buttons">
+                                            <div class="btn-silent"></div>
+                                            <div class="btn-vol-up"></div>
+                                            <div class="btn-vol-down"></div>
+                                            <div class="btn-power"></div>
+                                        </div>
+                                        <div class="phone-screen">
+                                            <div class="dynamic-island-wrapper">
+                                                <div class="dynamic-island"></div>
+                                            </div>
+                                            <iframe src="<?php echo \App\Core\Config::url($user['username']); ?>" frameborder="0" id="profilePreview"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="preview-hint"><i class="fas fa-sync-alt"></i> Live Preview</p>
+                            </div>
+                        </div>
+                    </div> <!-- End dashboard-grid -->
+                </div> <!-- End dashboard-container -->
+            </div> <!-- End dashboard-layout -->
 
         <!-- Cropping Modal -->
         <div id="cropModal" class="modal">
@@ -331,194 +384,13 @@
         </div>
         <script src="<?php echo \App\Core\Config::asset('js/cropper.min.js'); ?>"></script>
         <script>
-            // ═══ Tab Switching Logic ═══
-            function switchTab(tabName, eventTriggered = true) {
-                // Deactivate all tabs and panels
-                document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
-
-                // Activate selected
-                document.getElementById('panel-' + tabName).classList.add('active');
-                
-                // If triggered by click, update the button and save to localStorage
-                if (eventTriggered && event) {
-                    event.currentTarget.classList.add('active');
-                    localStorage.setItem('activeSettingsTab', tabName);
-                } else {
-                    // Find the button manually if called programmatically
-                    document.querySelector(`button[onclick*="'${tabName}'"]`).classList.add('active');
-                }
-            }
-
-            // Restore last active tab on load
-            window.addEventListener('DOMContentLoaded', () => {
-                const lastTab = localStorage.getItem('activeSettingsTab') || 'profile';
-                switchTab(lastTab, false);
-            });
-
-            // ═══ SEO Live Preview ═══
-            const seoTitle = document.getElementById('seo_title');
-            const seoDesc = document.getElementById('seo_description');
-            const previewTitle = document.getElementById('seoPreviewTitle');
-            const previewDesc = document.getElementById('seoPreviewDesc');
-
-            if (seoTitle && previewTitle) {
-                seoTitle.addEventListener('input', () => {
-                    previewTitle.textContent = seoTitle.value || '<?php echo htmlspecialchars($user['display_name'] ?: $user['username']); ?>';
-                });
-            }
-            if (seoDesc && previewDesc) {
-                seoDesc.addEventListener('input', () => {
-                    previewDesc.textContent = seoDesc.value || 'Check out my links and social profiles.';
-                });
-            }
-
-            // ═══ Cropper.js Logic ═══
-            let cropper;
-            const cropModal = document.getElementById('cropModal');
-            const imageToCrop = document.getElementById('imageToCrop');
-            const avatarInput = document.querySelector('input[type="file"]#avatar');
-            const confirmCrop = document.getElementById('confirmCrop');
-            const cancelCrop = document.getElementById('cancelCrop');
-
-            // When a file is selected
-            avatarInput.addEventListener('change', function(e) {
-                const files = e.target.files;
-                if (files && files.length > 0) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        imageToCrop.src = event.target.result;
-                        cropModal.style.display = 'flex';
-
-                        if (cropper) cropper.destroy();
-                        cropper = new Cropper(imageToCrop, {
-                            aspectRatio: 1,
-                            viewMode: 1,
-                            background: false
-                        });
-                    };
-                    reader.readAsDataURL(files[0]);
-                }
-            });
-
-            // Cancel button
-            cancelCrop.onclick = () => {
-                cropModal.style.display = 'none';
-                avatarInput.value = '';
+            // Pass dynamic PHP data to the external JavaScript file
+            window.SettingsConfig = {
+                defaultSeoTitle: '<?php echo htmlspecialchars($user['display_name'] ?: $user['username']); ?>'
             };
-
-            // Confirm Crop button
-            confirmCrop.onclick = () => {
-                const canvas = cropper.getCroppedCanvas({
-                    width: 400,
-                    height: 400
-                });
-
-                canvas.toBlob((blob) => {
-                    // Update preview
-                    const avatarImg = document.querySelector('.avatar-circle img');
-                    if (avatarImg) {
-                        avatarImg.src = canvas.toDataURL();
-                    } else {
-                        const circle = document.querySelector('.avatar-circle');
-                        circle.innerHTML = '<img src="' + canvas.toDataURL() + '" alt="Avatar">';
-                    }
-
-                    // Create a new file object from the blob to replace the input file
-                    const croppedFile = new File([blob], 'cropped_avatar.png', { type: 'image/png' });
-
-                    // Use DataTransfer to inject the new file into the input
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(croppedFile);
-                    avatarInput.files = dataTransfer.files;
-
-                    cropModal.style.display = 'none';
-                });
-            };
-
-            // ═══ Bio Line Limit ═══
-            const bioTextarea = document.getElementById('bio');
-            const maxLines = 3;
-
-            bioTextarea.addEventListener('input', function() {
-                const lines = this.value.split('\n');
-                if (lines.length > maxLines) {
-                    this.value = lines.slice(0, maxLines).join('\n');
-                }
-            });
-
-            bioTextarea.addEventListener('paste', function(e) {
-                setTimeout(() => {
-                    const lines = this.value.split('\n');
-                    if (lines.length > maxLines) {
-                        this.value = lines.slice(0, maxLines).join('\n');
-                    }
-                }, 0);
-            });
-            // Background Live Preview Handler
-            function handleBgPreview(input) {
-                const container = document.getElementById('bg_preview_container');
-                const imgPreview = document.getElementById('bg_preview_img');
-                const videoPreview = document.getElementById('bg_preview_video');
-                const filenameText = document.getElementById('bg_preview_filename');
-                
-                if (input.files && input.files[0]) {
-                    const file = input.files[0];
-                    const url = URL.createObjectURL(file);
-                    
-                    container.style.display = 'block';
-                    filenameText.textContent = 'Selected: ' + file.name;
-
-                    if (file.type.startsWith('video/')) {
-                        imgPreview.style.display = 'none';
-                        videoPreview.src = url;
-                        videoPreview.style.display = 'block';
-                        videoPreview.play();
-                    } else {
-                        videoPreview.style.display = 'none';
-                        videoPreview.pause();
-                        imgPreview.src = url;
-                        imgPreview.style.display = 'block';
-                    }
-                }
-            }
-
-            // --- Theme Preset Loader ---
-            const themeSelect = document.getElementById('theme');
-            const colorInputs = {
-                bg_color: document.getElementById('bg_color'),
-                button_bg_color: document.getElementById('button_bg_color'),
-                button_text_color: document.getElementById('button_text_color'),
-                font_color: document.getElementById('font_color')
-            };
-
-            const themePresets = {
-                dark:  { bg: '#000000', btn: '#dc2726', btnText: '#ffffff', font: '#ffffff' },
-                light: { bg: '#f4f4f9', btn: '#222222', btnText: '#ffffff', font: '#333333' },
-                ocean: { bg: '#0f172a', btn: '#38bdf8', btnText: '#0f172a', font: '#f8fafc' },
-                neon:  { bg: '#0a0a0a', btn: '#00f2ff', btnText: '#000000', font: '#ffffff' }
-            };
-
-            themeSelect.addEventListener('change', function() {
-                const preset = themePresets[this.value];
-                if (preset) {
-                    colorInputs.bg_color.value = preset.bg;
-                    colorInputs.button_bg_color.value = preset.btn;
-                    colorInputs.button_text_color.value = preset.btnText;
-                    colorInputs.font_color.value = preset.font;
-                    
-                    // Trigger custom colors group visibility
-                    document.getElementById('bg_color_group').style.display = 'block';
-                }
-            });
-
-            // If user touches any color picker, automatically switch dropdown to "Custom"
-            Object.values(colorInputs).forEach(input => {
-                input.addEventListener('input', () => {
-                    themeSelect.value = 'custom';
-                });
-            });
         </script>
+        <script src="<?php echo \App\Core\Config::asset('js/toast.js'); ?>"></script>
+        <script src="<?php echo \App\Core\Config::asset('js/settings.js'); ?>"></script>
 
         <script src="<?php echo \App\Core\Config::asset('js/main.js'); ?>"></script>
 </body>

@@ -233,9 +233,10 @@ class UserController extends Controller {
         }
 
         $userId = $_SESSION['user_id'];
-        $order = $_POST['order'] ?? null;
+        $orderRaw = $_POST['order'] ?? null;
+        $order = $orderRaw ? json_decode($orderRaw, true) : null;
 
-        if ($order && $this->userModel->updateSocialOrder($userId, $order)) {
+        if ($order && is_array($order) && $this->userModel->updateSocialOrder($userId, $order)) {
             echo json_encode(['success' => true]);
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to save order']);

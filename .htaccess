@@ -1,7 +1,64 @@
+Options -Indexes
 RewriteEngine On
-RewriteBase /algraphyHub/
 
-# Redirect everything to public/index.php
+# ----------------------------------
+# MIME Types
+# ----------------------------------
+AddType application/manifest+json .webmanifest
+AddType text/css .css
+AddType application/javascript .js
+
+# ----------------------------------
+# Security Headers
+# ----------------------------------
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data: https: blob:; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; frame-src 'self'; connect-src 'self' https://www.google-analytics.com; object-src 'none'; base-uri 'self'; frame-ancestors 'self';"
+
+    # Protection against SVG XSS (Force as image)
+    <FilesMatch "\.svg$">
+        Header set Content-Security-Policy "default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'none';"
+    </FilesMatch>
+</IfModule>
+
+# ----------------------------------
+# Cache Static Assets
+# ----------------------------------
+<FilesMatch "\.(png|jpg|jpeg|gif|webp|svg|css|js|woff|woff2)$">
+<IfModule mod_headers.c>
+Header set Cache-Control "public, max-age=31536000, immutable"
+</IfModule>
+</FilesMatch>
+
+# ----------------------------------
+# Base path detect
+# ----------------------------------
+RewriteCond %{REQUEST_URI} ^/algraphyHub/
+RewriteRule ^ - [E=BASE:/algraphyHub/]
+
+RewriteCond %{REQUEST_URI} !^/algraphyHub/
+RewriteRule ^ - [E=BASE:/]
+
+# Root
+RewriteRule ^$ public/index.php [L]
+
+# Assets
+RewriteRule ^(assets|uploads)/(.*)$ public/$1/$2 [L]
+
+# ----------------------------------
+# Block Access to Sensitive Files
+# ----------------------------------
+<FilesMatch "^\.env|^\.htaccess|^\.git|composer\.(json|lock)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# ----------------------------------
+# Front controller
+# ----------------------------------
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ public/index.php [L,QSA]

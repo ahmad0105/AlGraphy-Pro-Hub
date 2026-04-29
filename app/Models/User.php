@@ -198,11 +198,15 @@ class User {
             $this->db->beginTransaction();
             foreach ($order as $index => $platform) {
                 if ($platform === 'twitter') $platform = 'x';
-                $stmt = $this->db->prepare("UPDATE user_socials SET sort_order = :sort_order WHERE user_id = :user_id AND platform = :platform");
+                // Use INSERT ON DUPLICATE KEY UPDATE to ensure order is saved even if value is empty
+                $stmt = $this->db->prepare("INSERT INTO user_socials (user_id, platform, sort_order, value) 
+                                            VALUES (:user_id, :platform, :sort_order, '') 
+                                            ON DUPLICATE KEY UPDATE sort_order = :sort_order2");
                 $stmt->execute([
                     'sort_order' => $index,
                     'user_id' => $id,
-                    'platform' => $platform
+                    'platform' => $platform,
+                    'sort_order2' => $index
                 ]);
             }
             $this->db->commit();

@@ -6,6 +6,8 @@
 /public/uploads/links/*
 !/public/uploads/links/.gitkeep
 /brain/
+/logs/*.log
 .DS_Store
 .env
+.env.local
 *.log
