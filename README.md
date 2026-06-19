@@ -2,6 +2,7 @@
 
 **AlGraphy Pro Hub** is a premium, high-performance "Link-in-bio" platform designed for creators and businesses to centralize their digital presence in a sleek, fast, and highly secure landing page.
 
+https://algraphyprohub.rf.gd/
 ---
 
 ## ✨ Key Features
